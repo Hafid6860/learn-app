@@ -40,6 +40,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('admin.')
         ->group(function () {
 
+            Route::bind('student', function ($value) {
+                return User::where('id', $value)
+                    ->where('is_admin', false)
+                    ->firstOrFail();
+            });
+            
             Route::resource('students', StudentController::class);
 
             // Route::resource('learning-sessions', LearningSessionController::class);
@@ -47,7 +53,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
 
 
-   //student route
+    //student route
     // Route::prefix('learning-sessions')
     //     ->name('learning-sessions.')
     //     ->group(function () {
@@ -62,11 +68,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     //verif admin
-    Route::bind('student', function ($value) {
-        return User::where('id', $value)
-            ->where('is_admin', false)
-            ->firstOrFail();
-    });
+
 });
 
 require __DIR__ . '/auth.php';

@@ -24,7 +24,7 @@
             </form>
 
             <a href="{{ route('admin.students.create') }}"
-               class="bg-blue-600 text-white px-4 py-2 rounded text-sm">
+               class="bg-dark-1000 text-dark px-4 py-2 rounded text-sm">
                 + Add Student
             </a>
         </div>

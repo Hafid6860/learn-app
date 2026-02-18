@@ -14,7 +14,7 @@
 
             @include('admin.students._form')
 
-            <button class="bg-yellow-600 text-white px-4 py-2 rounded">
+            <button class="bg-yellow-600 text-dark px-4 py-2 rounded">
                 Update
             </button>
         </form>
