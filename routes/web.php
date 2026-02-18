@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\StudentController;
-// use App\Http\Controllers\Admin\LearningSessionController;
-// use App\Http\Controllers\Student\LearningSessionController as StudentLearningSessionController;
+use App\Http\Controllers\Admin\LearningSessionController;
+use App\Http\Controllers\Student\LearningSessionController as StudentLearningSessionController;
 use App\Models\User;
 
 
@@ -45,26 +45,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     ->where('is_admin', false)
                     ->firstOrFail();
             });
-            
+
             Route::resource('students', StudentController::class);
 
-            // Route::resource('learning-sessions', LearningSessionController::class);
+            Route::resource('learning-sessions', LearningSessionController::class);
 
         });
 
 
     //student route
-    // Route::prefix('learning-sessions')
-    //     ->name('learning-sessions.')
-    //     ->group(function () {
+    Route::prefix('learning-sessions')
+        ->name('learning-sessions.')
+        ->group(function () {
 
-    //         Route::get('/', [StudentLearningSessionController::class, 'index'])
-    //             ->name('index');
+            Route::get('/', [StudentLearningSessionController::class, 'index'])
+                ->name('index');
 
-    //         Route::get('/{learningSession}', [StudentLearningSessionController::class, 'show'])
-    //             ->name('show');
+            Route::get('/{learningSession}', [StudentLearningSessionController::class, 'show'])
+                ->name('show');
 
-    //     });
+        });
 
 
     //verif admin

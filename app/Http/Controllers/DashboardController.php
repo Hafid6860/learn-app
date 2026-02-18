@@ -12,6 +12,6 @@ class DashboardController extends Controller
             return redirect()->route('admin.students.index');
         }
 
-        return view('student.dashboard');
+        return redirect()->route('learning-sessions.index');
     }
 }
