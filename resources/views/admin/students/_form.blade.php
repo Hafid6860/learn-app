@@ -17,7 +17,7 @@
     </div>
 
     <div>
-        <label class="block text-sm">Password (optional for edit)</label>
+        <label class="block text-sm">Password</label>
         <input type="password" name="password"
                class="w-full border rounded px-3 py-2">
     </div>

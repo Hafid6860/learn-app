@@ -5,6 +5,19 @@
         </h2>
     </x-slot>
 
+    @if (session('success'))
+        <div class="mb-4 p-4 bg-green-100 text-dark-700 rounded">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('info'))
+        <div class="mb-4 p-4 bg-blue-100 text-dark-700 rounded">
+            {{ session('info') }}
+        </div>
+    @endif
+
+
     <div class="py-6 px-6 space-y-6">
 
         <div class="bg-white p-6 rounded shadow">
@@ -39,12 +52,25 @@
             </div>
         @endif
 
-        <form action="{{ route('learning-sessions.complete', $learningSession) }}" method="POST" class="mt-4">
-            @csrf
-            <button class="bg-green-600 text-dark px-4 py-2 rounded">
-                Mark as Completed
-            </button>
-        </form>
+        @can('complete', $learningSession)
+
+            @if (!$learningSession->isCompletedBy(auth()->user()))
+                <form action="{{ route('learning-sessions.complete', $learningSession) }}" method="POST" class="mt-4">
+                    @csrf
+                    <button class="bg-green-600 text-dark px-4 py-2 rounded">
+                        Mark as Completed
+                    </button>
+                </form>
+            @else
+                <div class="mt-4">
+                    <span class="bg-green-100 text-green-700 px-4 py-2 rounded">
+                        ✔ Completed
+                    </span>
+                </div>
+            @endif
+
+        @endcan
+
 
         <div>
             <a href="{{ route('learning-sessions.index') }}" class="text-dark-600 underline">

@@ -27,7 +27,13 @@ class LearningSession extends Model
     }
 
 
-
+    public function isCompletedBy(User $user): bool
+    {
+        return $this->students()
+            ->where('user_id', $user->id)
+            ->wherePivot('is_completed', true)
+            ->exists();
+    }
     public function getYoutubeEmbedUrlAttribute()
     {
         if (!$this->video_url) {

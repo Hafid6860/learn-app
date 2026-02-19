@@ -31,7 +31,13 @@ class LearningSessionController extends Controller
     {
         $this->authorize('complete', $learningSession);
 
-        auth()->user()->completedSessions()
+        $user = auth()->user();
+
+        if ($learningSession->isCompletedBy($user)) {
+            return back()->with('info', 'Session already completed.');
+        }
+
+        $user->completedSessions()
             ->updateExistingPivot($learningSession->id, [
                 'is_completed' => true,
                 'completed_at' => now(),
