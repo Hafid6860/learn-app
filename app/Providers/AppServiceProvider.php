@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\LearningSession;
+use App\Policies\LearningSessionPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,4 +23,9 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+
+    
+    protected $policies = [
+        LearningSession::class => LearningSessionPolicy::class,
+    ];
 }

@@ -21,10 +21,22 @@ class LearningSessionController extends Controller
     public function show(LearningSession $learningSession)
     {
         // Security check: student hanya boleh lihat miliknya
-        if ($learningSession->user_id !== auth()->id()) {
-            abort(403);
-        }
+        $this->authorize('view', $learningSession);
+
 
         return view('student.learning-sessions.show', compact('learningSession'));
+    }
+
+    public function complete(LearningSession $learningSession)
+    {
+        $this->authorize('complete', $learningSession);
+
+        auth()->user()->completedSessions()
+            ->updateExistingPivot($learningSession->id, [
+                'is_completed' => true,
+                'completed_at' => now(),
+            ]);
+
+        return back()->with('success', 'Session marked as completed.');
     }
 }

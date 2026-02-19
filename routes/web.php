@@ -49,7 +49,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::resource('students', StudentController::class);
 
             Route::resource('learning-sessions', LearningSessionController::class);
-
         });
 
 
@@ -64,6 +63,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/{learningSession}', [StudentLearningSessionController::class, 'show'])
                 ->name('show');
 
+            Route::post('/{learningSession}/complete',[StudentLearningSessionController::class, 'complete'])
+                ->name('complete');
         });
 
 

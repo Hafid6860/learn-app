@@ -32,11 +32,13 @@ class LearningSessionController extends Controller
             'title'          => 'required|string|max:255',
             'summary'        => 'required|string',
             'video_url'      => 'nullable|url',
-            'source_code_url'=> 'nullable|url',
+            'source_code_url' => 'nullable|url',
             'meeting_date'   => 'required|date',
         ]);
 
-        LearningSession::create($request->all());
+        $session = LearningSession::create($request->all());
+        $session->students()->attach($request->user_id);
+
 
         return redirect()
             ->route('admin.learning-sessions.index')
@@ -62,11 +64,11 @@ class LearningSessionController extends Controller
             'title'          => 'required|string|max:255',
             'summary'        => 'required|string',
             'video_url'      => 'nullable|url',
-            'source_code_url'=> 'nullable|url',
+            'source_code_url' => 'nullable|url',
             'meeting_date'   => 'required|date',
         ]);
 
-        $learningSession->update($request->all());
+        $learningSession->students()->syncWithoutDetaching([$request->user_id]);
 
         return redirect()
             ->route('admin.learning-sessions.index')

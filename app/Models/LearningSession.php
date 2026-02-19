@@ -19,4 +19,40 @@ class LearningSession extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function students()
+    {
+        return $this->belongsToMany(User::class)
+            ->withPivot('is_completed', 'completed_at')
+            ->withTimestamps();
+    }
+
+
+
+    public function getYoutubeEmbedUrlAttribute()
+    {
+        if (!$this->video_url) {
+            return null;
+        }
+
+        $url = $this->video_url;
+
+        if (str_contains($url, 'watch?v=')) {
+            parse_str(parse_url($url, PHP_URL_QUERY), $query);
+            return isset($query['v'])
+                ? 'https://www.youtube.com/embed/' . $query['v']
+                : null;
+        }
+
+        if (str_contains($url, 'youtu.be/')) {
+            $videoId = basename(parse_url($url, PHP_URL_PATH));
+            return 'https://www.youtube.com/embed/' . $videoId;
+        }
+
+        if (str_contains($url, '/shorts/')) {
+            $videoId = basename(parse_url($url, PHP_URL_PATH));
+            return 'https://www.youtube.com/embed/' . $videoId;
+        }
+
+        return null;
+    }
 }

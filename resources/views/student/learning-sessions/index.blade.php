@@ -23,11 +23,14 @@
                             <td class="p-3">{{ $session->meeting_date }}</td>
                             <td class="p-3">
                                 <a href="{{ route('learning-sessions.show', $session) }}"
-                                   class="text-blue-600 underline">
+                                    class="text-blue-600 underline">
                                     View
                                 </a>
                             </td>
                         </tr>
+                        @if ($session->pivot?->is_completed)
+                            <span class="text-dark-600 text-xs">Completed</span>
+                        @endif
                     @empty
                         <tr>
                             <td colspan="3" class="p-4 text-center text-gray-500">

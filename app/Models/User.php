@@ -48,6 +48,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(LearningSession::class);
     }
+    public function completedSessions()
+    {
+        return $this->belongsToMany(LearningSession::class)
+            ->withPivot('is_completed', 'completed_at')
+            ->withTimestamps();
+    }
 
     protected function casts(): array
     {

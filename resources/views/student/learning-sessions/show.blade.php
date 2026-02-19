@@ -18,31 +18,36 @@
             </p>
         </div>
 
-        @if($learningSession->video_url)
+        @if ($learningSession->youtube_embed_url)
             <div class="bg-white p-6 rounded shadow">
-                <h3 class="font-semibold mb-2">Video</h3>
-                <a href="{{ $learningSession->video_url }}"
-                   target="_blank"
-                   class="text-blue-600 underline">
-                    Watch Video
-                </a>
+                <h3 class="font-semibold mb-4">Video</h3>
+
+                <iframe src="{{ $learningSession->youtube_embed_url }}" class="w-full h-96 rounded" frameborder="0"
+                    allowfullscreen>
+                </iframe>
             </div>
         @endif
 
-        @if($learningSession->source_code_url)
+
+
+        @if ($learningSession->source_code_url)
             <div class="bg-white p-6 rounded shadow">
                 <h3 class="font-semibold mb-2">Source Code</h3>
-                <a href="{{ $learningSession->source_code_url }}"
-                   target="_blank"
-                   class="text-blue-600 underline">
+                <a href="{{ $learningSession->source_code_url }}" target="_blank" class="text-blue-600 underline">
                     Download Source Code
                 </a>
             </div>
         @endif
 
+        <form action="{{ route('learning-sessions.complete', $learningSession) }}" method="POST" class="mt-4">
+            @csrf
+            <button class="bg-green-600 text-dark px-4 py-2 rounded">
+                Mark as Completed
+            </button>
+        </form>
+
         <div>
-            <a href="{{ route('learning-sessions.index') }}"
-               class="text-dark-600 underline">
+            <a href="{{ route('learning-sessions.index') }}" class="text-dark-600 underline">
                 ← Back
             </a>
         </div>

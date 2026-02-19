@@ -58,7 +58,9 @@ class StudentController extends Controller
 
     public function show(User $student)
     {
-        $completedSessions = $student->learningSessions()->count();
+        $completedSessions = $student->completedSessions()
+            ->wherePivot('is_completed', true)
+            ->count();
         $totalSessions     = $student->total_sessions;
 
         $progressPercentage = $totalSessions > 0
