@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('learning_sessions', function (Blueprint $table) {
-            $table->unique(['user_id', 'session_number']);
+            $table->integer('session_number')->nullable()->after('user_id');
         });
     }
 

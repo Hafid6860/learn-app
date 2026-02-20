@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\LearningSession;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class LearningSessionController extends Controller
 {
@@ -120,9 +119,5 @@ class LearningSessionController extends Controller
         return redirect()
             ->route('admin.learning-sessions.index')
             ->with('success', 'Learning session deleted successfully.');
-    }
-    public function getFormattedSummaryAttribute()
-    {
-        return Str::markdown($this->summary);
     }
 }

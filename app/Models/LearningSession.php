@@ -8,7 +8,6 @@ class LearningSession extends Model
 {
     protected $fillable = [
         'user_id',
-        'session_number',
         'title',
         'summary',
         'video_url',
@@ -61,22 +60,5 @@ class LearningSession extends Model
         }
 
         return null;
-    }
-    public function isUnlockedFor(User $user): bool
-    {
-        if ($this->session_number === 1) {
-            return true;
-        }
-
-        $previousSession = self::where('user_id', $this->user_id)
-            ->where('session_number', $this->session_number - 1)
-            ->first();
-
-        if (!$previousSession) {
-            return false;
-        }
-
-        return $user->completedSessions
-            ->contains($previousSession->id);
     }
 }
