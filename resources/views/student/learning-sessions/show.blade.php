@@ -1,6 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800">
+            Pertemuan {{ $learningSession->session_number }} -
             {{ $learningSession->title }}
         </h2>
     </x-slot>
@@ -26,9 +27,9 @@
 
         <div class="bg-white p-6 rounded shadow">
             <h3 class="font-semibold mb-2">Summary</h3>
-            <p class="whitespace-pre-line">
-                {{ $learningSession->summary }}
-            </p>
+            <div class="prose max-w-none">
+                {!! $learningSession->summary !!}
+            </div>
         </div>
 
         @if ($learningSession->youtube_embed_url)

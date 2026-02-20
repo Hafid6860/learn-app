@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('learning_sessions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->integer('session_number')->nullable();
             $table->string('title');
             $table->longText('summary');
             $table->string('video_url')->nullable();
