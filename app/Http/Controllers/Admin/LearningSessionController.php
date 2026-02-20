@@ -36,9 +36,32 @@ class LearningSessionController extends Controller
             'meeting_date'   => 'required|date',
         ]);
 
-        $session = LearningSession::create($request->all());
-        $session->students()->attach($request->user_id);
+        $student = User::where('is_admin', false)
+            ->findOrFail($request->user_id);
 
+        $currentSessionCount = $student->learningSessions()->count();
+
+        if ($currentSessionCount >= $student->total_sessions) {
+            return back()
+                ->withErrors([
+                    'user_id' => 'This student has reached the maximum allowed sessions.'
+                ])
+                ->withInput();
+        }
+
+        $nextSessionNumber = $currentSessionCount + 1;
+
+        $session = LearningSession::create([
+            'user_id'        => $student->id,
+            'session_number' => $nextSessionNumber,
+            'title'          => $request->title,
+            'summary'        => $request->summary,
+            'video_url'      => $request->video_url,
+            'source_code_url' => $request->source_code_url,
+            'meeting_date'   => $request->meeting_date,
+        ]);
+
+        $session->students()->attach($student->id);
 
         return redirect()
             ->route('admin.learning-sessions.index')
@@ -67,6 +90,20 @@ class LearningSessionController extends Controller
             'source_code_url' => 'nullable|url',
             'meeting_date'   => 'required|date',
         ]);
+
+        $student = User::findOrFail($request->user_id);
+
+        $currentSessionCount = $student->learningSessions()
+            ->where('id', '!=', $learningSession->id)
+            ->count();
+
+        if ($currentSessionCount >= $student->total_sessions) {
+            return back()
+                ->withErrors([
+                    'user_id' => 'This student has reached the maximum allowed sessions.'
+                ])
+                ->withInput();
+        }
 
         $learningSession->students()->syncWithoutDetaching([$request->user_id]);
 
