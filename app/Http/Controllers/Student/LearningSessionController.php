@@ -12,8 +12,9 @@ class LearningSessionController extends Controller
     {
         $sessions = auth()->user()
             ->learningSessions()
-            ->latest()
+            ->orderBy('session_number', 'asc')
             ->paginate(10);
+
 
         return view('student.learning-sessions.index', compact('sessions'));
     }
@@ -37,11 +38,12 @@ class LearningSessionController extends Controller
             return back()->with('info', 'Session already completed.');
         }
 
-        $user->completedSessions()
-            ->updateExistingPivot($learningSession->id, [
+        $learningSession->students()
+            ->updateExistingPivot($user->id, [
                 'is_completed' => true,
                 'completed_at' => now(),
             ]);
+
 
         return back()->with('success', 'Session marked as completed.');
     }

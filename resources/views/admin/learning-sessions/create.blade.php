@@ -18,10 +18,11 @@
             @include('admin.learning-sessions._form')
 
             <div class="flex justify-end">
-                <button class="bg-blue-600 text-dark px-4 py-2 rounded">
+                <button class="bg-blue-600 text-white px-4 py-2 rounded">
                     Save
                 </button>
             </div>
+
 
         </form>
     </div>

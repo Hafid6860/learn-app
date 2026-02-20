@@ -105,11 +105,21 @@ class LearningSessionController extends Controller
                 ->withInput();
         }
 
+        $learningSession->update([
+            'user_id'        => $student->id,
+            'title'          => $request->title,
+            'summary'        => $request->summary,
+            'video_url'      => $request->video_url,
+            'source_code_url' => $request->source_code_url,
+            'meeting_date'   => $request->meeting_date,
+        ]);
+
         $learningSession->students()->syncWithoutDetaching([$request->user_id]);
 
         return redirect()
             ->route('admin.learning-sessions.index')
             ->with('success', 'Learning session updated successfully.');
+
     }
 
     public function destroy(LearningSession $learningSession)

@@ -38,23 +38,28 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
+
+    public function learningSessions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(LearningSession::class);
+    }
+
+    public function completedSessions(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(LearningSession::class)
+            ->withPivot('is_completed', 'completed_at')
+            ->wherePivot('is_completed', true)
+            ->withTimestamps();
+    }
+
+
+
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
-
-    public function learningSessions()
-    {
-        return $this->hasMany(LearningSession::class);
-    }
-    public function completedSessions()
-    {
-        return $this->belongsToMany(LearningSession::class)
-            ->withPivot('is_completed', 'completed_at')
-            ->withTimestamps();
-    }
-
     protected function casts(): array
     {
         return [
@@ -62,4 +67,5 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
 }

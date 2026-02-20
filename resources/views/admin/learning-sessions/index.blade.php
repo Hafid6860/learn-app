@@ -14,9 +14,10 @@
         @endif
 
         <a href="{{ route('admin.learning-sessions.create') }}"
-           class="bg-blue-600 text-dark px-4 py-2 rounded text-sm">
+           class="bg-blue-600 text-white px-4 py-2 rounded text-sm">
             + Add Session
         </a>
+
 
         <div class="mt-4 bg-white shadow rounded overflow-hidden">
             <table class="min-w-full text-sm">

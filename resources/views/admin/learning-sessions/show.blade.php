@@ -41,10 +41,11 @@
         @endif
 
         <div>
-            <a href="{{ route('admin.learning-sessions.index') }}" class="text-dark-600 underline">
+            <a href="{{ route('admin.learning-sessions.index') }}" class="text-gray-600 underline">
                 ← Back to list
             </a>
         </div>
+
 
     </div>
 </x-app-layout>
