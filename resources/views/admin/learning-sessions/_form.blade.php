@@ -29,7 +29,7 @@
 
     <div>
         <label class="block text-sm mb-1">Summary</label>
-        <textarea name="summary"
+        <textarea id="summary" name="summary"
                   class="w-full border @error('summary') border-red-500 @enderror rounded px-3 py-2">{{ old('summary', $learningSession->summary ?? '') }}</textarea>
         @error('summary')
             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -67,3 +67,21 @@
     </div>
 
 </div>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        ClassicEditor
+            .create(document.querySelector('#summary'))
+            .catch(error => {
+                console.error(error);
+            });
+    });
+</script>
+<style>
+    /* Mengatur style default CKEditor agar tidak terlalu pendek ujungnya */
+    .ck-editor__editable[role="textbox"] {
+        min-height: 200px;
+    }
+</style>
+

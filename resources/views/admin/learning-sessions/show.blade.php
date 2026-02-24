@@ -15,9 +15,9 @@
 
         <div class="bg-white p-6 rounded shadow">
             <h3 class="font-semibold mb-2">Summary</h3>
-            <p class="whitespace-pre-line">
-                {{ $learningSession->summary }}
-            </p>
+            <div class="prose max-w-none">
+                {!! $learningSession->summary !!}
+            </div>
         </div>
 
         @if ($learningSession->youtube_embed_url)

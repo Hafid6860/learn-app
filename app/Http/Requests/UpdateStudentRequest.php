@@ -26,10 +26,10 @@ class UpdateStudentRequest extends FormRequest
         return [
             'name'           => 'required|string|max:255',
             'email'          => 'required|email|unique:users,email,' . $studentId,
-            'whatsapp_number' => 'nullable|string|max:20',
-            'learning_goal'  => 'nullable|string',
-            'package_name'   => 'nullable|string|max:255',
-            'total_sessions' => 'required|integer|min:0',
+            'whatsapp_number' => 'required|string|max:20',
+            'learning_goal'  => 'required|string',
+            'package_name'   => 'required|string|max:255',
+            'total_sessions' => 'required|integer|min:1',
         ];
     }
 
@@ -47,14 +47,17 @@ class UpdateStudentRequest extends FormRequest
             'email.required' => 'Email wajib diisi.',
             'email.email' => 'Format email tidak valid.',
             'email.unique' => 'Email sudah terdaftar.',
+            'whatsapp_number.required' => 'Nomor WhatsApp wajib diisi.',
             'whatsapp_number.string' => 'Nomor WhatsApp harus berupa teks.',
             'whatsapp_number.max' => 'Nomor WhatsApp maksimal 20 karakter.',
+            'learning_goal.required' => 'Tujuan belajar wajib diisi.',
             'learning_goal.string' => 'Tujuan belajar harus berupa teks.',
+            'package_name.required' => 'Nama paket wajib diisi.',
             'package_name.string' => 'Nama paket harus berupa teks.',
             'package_name.max' => 'Nama paket maksimal 255 karakter.',
             'total_sessions.required' => 'Total sesi wajib diisi.',
             'total_sessions.integer' => 'Total sesi harus berupa angka.',
-            'total_sessions.min' => 'Total sesi minimal 0.',
+            'total_sessions.min' => 'Total sesi minimal 1.',
         ];
     }
 }

@@ -25,8 +25,8 @@ class UpdateLearningSessionRequest extends FormRequest
             'user_id'        => 'required|exists:users,id',
             'title'          => 'required|string|max:255',
             'summary'        => 'required|string',
-            'video_url'      => 'nullable|url',
-            'source_code_url' => 'nullable|url',
+            'video_url'      => 'required|url',
+            'source_code_url' => 'required|url',
             'meeting_date'   => 'required|date',
         ];
     }
@@ -46,7 +46,9 @@ class UpdateLearningSessionRequest extends FormRequest
             'title.max' => 'Judul maksimal 255 karakter.',
             'summary.required' => 'Ringkasan wajib diisi.',
             'summary.string' => 'Ringkasan harus berupa teks.',
+            'video_url.required' => 'URL video wajib diisi.',
             'video_url.url' => 'Format URL video tidak valid.',
+            'source_code_url.required' => 'URL source code wajib diisi.',
             'source_code_url.url' => 'Format URL source code tidak valid.',
             'meeting_date.required' => 'Tanggal pertemuan wajib diisi.',
             'meeting_date.date' => 'Format tanggal pertemuan tidak valid.',
