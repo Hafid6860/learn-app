@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StoreStudentRequest;
+use App\Http\Requests\UpdateStudentRequest;
 
 class StudentController extends Controller
 {
@@ -28,17 +30,8 @@ class StudentController extends Controller
         return view('admin.students.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreStudentRequest $request)
     {
-        $request->validate([
-            'name'           => 'required|string|max:255',
-            'email'          => 'required|email|unique:users,email',
-            'password'       => 'required|min:6',
-            'whatsapp_number' => 'nullable|string|max:20',
-            'learning_goal'  => 'nullable|string',
-            'package_name'   => 'nullable|string|max:255',
-            'total_sessions' => 'required|integer|min:0',
-        ]);
 
         User::create([
             'name'            => $request->name,
@@ -80,16 +73,8 @@ class StudentController extends Controller
         return view('admin.students.edit', compact('student'));
     }
 
-    public function update(Request $request, User $student)
+    public function update(UpdateStudentRequest $request, User $student)
     {
-        $request->validate([
-            'name'           => 'required|string|max:255',
-            'email'          => 'required|email|unique:users,email,' . $student->id,
-            'whatsapp_number' => 'nullable|string|max:20',
-            'learning_goal'  => 'nullable|string',
-            'package_name'   => 'nullable|string|max:255',
-            'total_sessions' => 'required|integer|min:0',
-        ]);
 
         $student->update([
             'name'            => $request->name,

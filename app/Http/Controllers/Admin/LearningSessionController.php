@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\LearningSession;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreLearningSessionRequest;
+use App\Http\Requests\UpdateLearningSessionRequest;
 
 class LearningSessionController extends Controller
 {
@@ -25,16 +27,8 @@ class LearningSessionController extends Controller
         return view('admin.learning-sessions.create', compact('students'));
     }
 
-    public function store(Request $request)
+    public function store(StoreLearningSessionRequest $request)
     {
-        $request->validate([
-            'user_id'        => 'required|exists:users,id',
-            'title'          => 'required|string|max:255',
-            'summary'        => 'required|string',
-            'video_url'      => 'nullable|url',
-            'source_code_url' => 'nullable|url',
-            'meeting_date'   => 'required|date',
-        ]);
 
         $student = User::where('is_admin', false)
             ->findOrFail($request->user_id);
@@ -80,16 +74,8 @@ class LearningSessionController extends Controller
         return view('admin.learning-sessions.edit', compact('learningSession', 'students'));
     }
 
-    public function update(Request $request, LearningSession $learningSession)
+    public function update(UpdateLearningSessionRequest $request, LearningSession $learningSession)
     {
-        $request->validate([
-            'user_id'        => 'required|exists:users,id',
-            'title'          => 'required|string|max:255',
-            'summary'        => 'required|string',
-            'video_url'      => 'nullable|url',
-            'source_code_url' => 'nullable|url',
-            'meeting_date'   => 'required|date',
-        ]);
 
         $student = User::findOrFail($request->user_id);
 
