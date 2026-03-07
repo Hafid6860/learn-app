@@ -16,14 +16,20 @@ class StudentController extends Controller
         $query = User::where('is_admin', false);
 
         if ($request->search) {
-            $query->where('name', 'like', '%' . $request->search . '%')
-                ->orWhere('email', 'like', '%' . $request->search . '%');
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('email', 'like', '%' . $request->search . '%');
+            });
         }
 
-        $students = $query->latest()->paginate(10);
+        $students = $query->latest()->paginate(10)->appends($request->query());
+        
+        $totalStudents = User::where('is_admin', false)->count();
+        $totalLearningSessions = \App\Models\LearningSession::count();
 
-        return view('admin.students.index', compact('students'));
+        return view('admin.students.index', compact('students', 'totalStudents', 'totalLearningSessions'));
     }
+
 
     public function create()
     {
@@ -32,17 +38,11 @@ class StudentController extends Controller
 
     public function store(StoreStudentRequest $request)
     {
+        $data = $request->validated();
+        $data['password'] = Hash::make($data['password']);
+        $data['is_admin'] = false;
 
-        User::create([
-            'name'            => $request->name,
-            'email'           => $request->email,
-            'password'        => Hash::make($request->password),
-            'whatsapp_number' => $request->whatsapp_number,
-            'learning_goal'   => $request->learning_goal,
-            'package_name'    => $request->package_name,
-            'total_sessions'  => $request->total_sessions,
-            'is_admin'        => false,
-        ]);
+        User::create($data);
 
         return redirect()
             ->route('admin.students.index')
@@ -75,21 +75,15 @@ class StudentController extends Controller
 
     public function update(UpdateStudentRequest $request, User $student)
     {
+        $data = $request->validated();
 
-        $student->update([
-            'name'            => $request->name,
-            'email'           => $request->email,
-            'whatsapp_number' => $request->whatsapp_number,
-            'learning_goal'   => $request->learning_goal,
-            'package_name'    => $request->package_name,
-            'total_sessions'  => $request->total_sessions,
-        ]);
-
-        if ($request->filled('password')) {
-            $student->update([
-                'password' => Hash::make($request->password),
-            ]);
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
         }
+
+        $student->update($data);
 
         return redirect()
             ->route('admin.students.index')
@@ -104,14 +98,5 @@ class StudentController extends Controller
             ->route('admin.students.index')
             ->with('success', 'Student deleted successfully.');
     }
-
-    // public function __construct()
-    // {
-    //     $this->middleware(function ($request, $next) {
-    //         if (isset($request->student) && $request->student->is_admin) {
-    //             abort(404);
-    //         }
-    //         return $next($request);
-    //     });
-    // }
+    
 }

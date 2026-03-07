@@ -22,7 +22,6 @@ class StoreLearningSessionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id'        => 'required|exists:users,id',
             'title'          => 'required|string|max:255',
             'summary'        => 'required|string',
             'video_url'      => 'required|url',
@@ -39,8 +38,6 @@ class StoreLearningSessionRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user_id.required' => 'Siswa wajib dipilih.',
-            'user_id.exists' => 'Siswa tidak ditemukan.',
             'title.required' => 'Judul wajib diisi.',
             'title.string' => 'Judul harus berupa teks.',
             'title.max' => 'Judul maksimal 255 karakter.',

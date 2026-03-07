@@ -8,31 +8,40 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreLearningSessionRequest;
 use App\Http\Requests\UpdateLearningSessionRequest;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\LearningSessionCreatedMail;
 
 class LearningSessionController extends Controller
 {
-    public function index()
+    public function index(User $student)
     {
-        $sessions = LearningSession::with('user')
-            ->latest()
+        $sessions = $student->learningSessions()
+            ->orderBy('session_number')
             ->paginate(10);
 
-        return view('admin.learning-sessions.index', compact('sessions'));
+        $totalSessions = $student->total_sessions;
+        $createdSessions = $student->learningSessions()->count();
+        $completedCount = $student->completedSessions()->count();
+
+        return view('admin.learning-sessions.index', compact('student', 'sessions', 'totalSessions', 'createdSessions', 'completedCount'));
     }
 
-    public function create()
-    {
-        $students = User::where('is_admin', false)->get();
 
-        return view('admin.learning-sessions.create', compact('students'));
+    public function create(User $student)
+    {
+        $currentSessionCount = $student->learningSessions()->count();
+
+        if ($currentSessionCount >= $student->total_sessions) {
+            return back()->withErrors([
+                'user_id' => 'This student has reached the maximum allowed sessions.'
+            ]);
+        }
+        
+        return view('admin.learning-sessions.create', compact('student'));
     }
 
-    public function store(StoreLearningSessionRequest $request)
+    public function store(StoreLearningSessionRequest $request, User $student)
     {
-
-        $student = User::where('is_admin', false)
-            ->findOrFail($request->user_id);
-
         $currentSessionCount = $student->learningSessions()->count();
 
         if ($currentSessionCount >= $student->total_sessions) {
@@ -45,40 +54,41 @@ class LearningSessionController extends Controller
 
         $nextSessionNumber = $currentSessionCount + 1;
 
-        $session = LearningSession::create([
-            'user_id'        => $student->id,
-            'session_number' => $nextSessionNumber,
-            'title'          => $request->title,
-            'summary'        => $request->summary,
-            'video_url'      => $request->video_url,
-            'source_code_url' => $request->source_code_url,
-            'meeting_date'   => $request->meeting_date,
-        ]);
+        $data = $request->validated();
+        $data['user_id'] = $student->id;
+        $data['student_id'] = $student->id; // maintaining original data structures compatibility
+        $data['session_number'] = $nextSessionNumber;
+
+        $session = LearningSession::create($data);
 
         $session->students()->attach($student->id);
 
+        Mail::to($student->email)->send(
+            new LearningSessionCreatedMail(
+                $student->name,
+                $session->title,
+                $session->meeting_date,
+                route('learning-sessions.show', $session->id)
+            )
+        );
+
         return redirect()
-            ->route('admin.learning-sessions.index')
+            ->route('admin.students.learning-sessions.index', $student)
             ->with('success', 'Learning session created successfully.');
     }
 
-    public function show(LearningSession $learningSession)
+    public function show(User $student, LearningSession $learningSession)
     {
-        return view('admin.learning-sessions.show', compact('learningSession'));
+        return view('admin.learning-sessions.show', compact('student', 'learningSession'));
     }
 
-    public function edit(LearningSession $learningSession)
+    public function edit(User $student, LearningSession $learningSession)
     {
-        $students = User::where('is_admin', false)->get();
-
-        return view('admin.learning-sessions.edit', compact('learningSession', 'students'));
+        return view('admin.learning-sessions.edit', compact('student', 'learningSession'));
     }
 
-    public function update(UpdateLearningSessionRequest $request, LearningSession $learningSession)
+    public function update(UpdateLearningSessionRequest $request, User $student, LearningSession $learningSession)
     {
-
-        $student = User::findOrFail($request->user_id);
-
         $currentSessionCount = $student->learningSessions()
             ->where('id', '!=', $learningSession->id)
             ->count();
@@ -91,29 +101,25 @@ class LearningSessionController extends Controller
                 ->withInput();
         }
 
-        $learningSession->update([
-            'user_id'        => $student->id,
-            'title'          => $request->title,
-            'summary'        => $request->summary,
-            'video_url'      => $request->video_url,
-            'source_code_url' => $request->source_code_url,
-            'meeting_date'   => $request->meeting_date,
-        ]);
+        $data = $request->validated();
+        $data['user_id'] = $student->id;
 
-        $learningSession->students()->syncWithoutDetaching([$request->user_id]);
+        $learningSession->update($data);
+
+        $learningSession->students()->syncWithoutDetaching([$student->id]);
 
         return redirect()
-            ->route('admin.learning-sessions.index')
+            ->route('admin.students.learning-sessions.index', $student)
             ->with('success', 'Learning session updated successfully.');
 
     }
 
-    public function destroy(LearningSession $learningSession)
+    public function destroy(User $student, LearningSession $learningSession)
     {
         $learningSession->delete();
 
         return redirect()
-            ->route('admin.learning-sessions.index')
+            ->route('admin.students.learning-sessions.index', $student)
             ->with('success', 'Learning session deleted successfully.');
     }
 }

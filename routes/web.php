@@ -48,7 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             Route::resource('students', StudentController::class);
 
-            Route::resource('learning-sessions', LearningSessionController::class);
+            Route::resource('students.learning-sessions', LearningSessionController::class);
         });
 
 
