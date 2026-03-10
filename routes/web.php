@@ -10,13 +10,12 @@ use App\Models\User;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/dashboard');
 });
 
 
 //auth
 Route::middleware(['auth', 'verified'])->group(function () {
-
     //dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
@@ -63,7 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/{learningSession}', [StudentLearningSessionController::class, 'show'])
                 ->name('show');
 
-            Route::post('/{learningSession}/complete',[StudentLearningSessionController::class, 'complete'])
+            Route::post('/{learningSession}/complete', [StudentLearningSessionController::class, 'complete'])
                 ->name('complete');
         });
 
