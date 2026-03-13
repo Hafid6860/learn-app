@@ -13,6 +13,8 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    @include('partials.pwa-head')
 </head>
 <body
     x-data="{ mobileMenuOpen: false, darkMode: false }"
@@ -71,6 +73,7 @@
                         @endauth
                     @endif
 
+                </div>
 
                 <!-- Mobile Menu Toggle -->
                 <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800">

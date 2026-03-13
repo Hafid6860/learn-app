@@ -13,6 +13,9 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        @include('partials.pwa-head')
+        <meta name="vapid-public-key" content="{{ config('webpush.vapid.public_key', '') }}">
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -33,4 +36,5 @@
             </main>
         </div>
     </body>
+    @include('partials.pwa-scripts')
 </html>

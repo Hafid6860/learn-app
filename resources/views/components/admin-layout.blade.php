@@ -13,6 +13,9 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    @include('partials.pwa-head')
+    <meta name="vapid-public-key" content="{{ config('webpush.vapid.public_key', '') }}">
 </head>
 <body
     x-data="{ page: 'dashboard', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -74,4 +77,5 @@
     <!-- Tailadmin Scripts -->
     <script defer src="{{ asset('tailadmin/js/index.js') }}"></script>
 </body>
+@include('partials.pwa-scripts')
 </html>

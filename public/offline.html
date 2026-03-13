@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline | LearnApp</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9fafb; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
+        .container { text-align: center; max-width: 400px; }
+        .icon { font-size: 64px; margin-bottom: 16px; }
+        h1 { font-size: 24px; color: #1f2937; margin-bottom: 8px; }
+        p { font-size: 16px; color: #6b7280; margin-bottom: 24px; line-height: 1.6; }
+        button { background: #465FFF; color: white; border: none; padding: 12px 32px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+        button:hover { background: #3b50e0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">📡</div>
+        <h1>Kamu Sedang Offline</h1>
+        <p>Sepertinya kamu tidak terhubung ke internet. Periksa koneksi kamu dan coba lagi.</p>
+        <button onclick="window.location.reload()">Coba Lagi</button>
+    </div>
+</body>
+</html>
